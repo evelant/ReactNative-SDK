@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.facebook.react.ReactApplication;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -1116,9 +1117,17 @@ public class GleapsdkModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void registerConfigLoadedAction(ConfigLoadedCallback configLoadedCallback) {
+  public void registerConfigLoadedAction(Callback callback) {
+    final ConfigLoadedCallback configLoadedCallback = new ConfigLoadedCallback() {
+      @Override
+      public void configLoaded(JSONObject var1) {
+        callback.invoke(var1);
+      }
+    };
+
     Gleap.getInstance().setConfigLoadedCallback(configLoadedCallback);
   }
+
 
   @ReactMethod
   public void disableConsoleLog() {
